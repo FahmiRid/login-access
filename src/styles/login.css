@@ -4,6 +4,7 @@ display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh; /* Optional: Set height for vertical centering */
+  background-color: black;
 }
 .input, button {
     width: 100%;
