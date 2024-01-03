@@ -1,15 +1,30 @@
-/* Add this CSS to your stylesheets */
-.dropdown {
-    border: 1px solid #ddd; /* Add your desired border style */
-    border-radius: 4px; /* Add your desired border radius */
-  }
-  
-  .dropdown.menu {
-    border: none; /* Remove default border for the menu */
-  }
-  
-  /* Optionally, you can add some padding to the menu items */
-  .dropdown.menu .item {
-    padding: 8px 12px; /* Adjust the padding as needed */
-  }
-  
+/* Add these styles to your homepage.css or any other CSS file you're using */
+
+/* Style for the Dropdown */
+.ui.dropdown {
+  margin-top: 10px;
+}
+
+/* Style for the Dropdown Menu */
+.ui.dropdown .menu {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* Style for the Checkbox items */
+.ui.dropdown .menu .item {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+}
+
+/* Style for the Checkbox label */
+.ui.dropdown .menu .item .ui.checkbox label {
+  margin-left: 8px;
+}
+
+/* Optional: Hover effect for the Checkbox items */
+.ui.dropdown .menu .item:hover {
+  background-color: #f0f0f0;
+  cursor: pointer;
+}

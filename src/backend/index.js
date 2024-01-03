@@ -47,6 +47,16 @@ const users = [
   },
 ];
 
+const sports = [
+  { id: 1, title: "MORTGAGE" },
+  { id: 2, title: "ASB" },
+  { id: 3, title: "DIGITAL WEALTH" },
+];
+
+app.get('/api/sports', (req, res) => {
+  res.json(sports);
+});
+
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
   const user = users.find((u) => u.name === username && u.password === password);
