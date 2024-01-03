@@ -1,0 +1,15 @@
+/* Add this CSS to your stylesheets */
+.dropdown {
+    border: 1px solid #ddd; /* Add your desired border style */
+    border-radius: 4px; /* Add your desired border radius */
+  }
+  
+  .dropdown.menu {
+    border: none; /* Remove default border for the menu */
+  }
+  
+  /* Optionally, you can add some padding to the menu items */
+  .dropdown.menu .item {
+    padding: 8px 12px; /* Adjust the padding as needed */
+  }
+  
