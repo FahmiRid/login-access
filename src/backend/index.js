@@ -47,6 +47,129 @@ const users = [
   },
 ];
 
+const roleList = [
+  {
+    "page_size": 5,
+    "total_records": 18,
+    "page": 1,
+    "search_text": "ASB",
+    "data": [
+      {
+        "role_name": "ASB maker",
+        "product_line": "ASB",
+        "status": "1"
+      },
+      {
+        "role_name": "ASB Checker",
+        "product_line": "ASB",
+        "status": "1"
+      },
+      {
+        "role_name": "Mortgage Maker",
+        "product_line": "Mortgage",
+        "status": "1"
+      },
+      {
+        "role_name": "Mortgage Checker",
+        "product_line": "Mortgage",
+        "status": "1"
+      },
+      {
+        "role_name": "DW Maker",
+        "product_line": "Digital Wealth",
+        "status": "1"
+      },
+      {
+        "role_name": "DW Checker",
+        "product_line": "Digital Wealth",
+        "status": "1"
+      },
+      {
+        "role_name": "ASB maker",
+        "product_line": "ASB",
+        "status": "0"
+      },
+      {
+        "role_name": "ASB Checker",
+        "product_line": "ASB",
+        "status": "0"
+      },
+      {
+        "role_name": "Mortgage Maker",
+        "product_line": "Mortgage",
+        "status": "0"
+      },
+      {
+        "role_name": "Mortgage Checker",
+        "product_line": "Mortgage",
+        "status": "0"
+      },
+      {
+        "role_name": "DW Maker",
+        "product_line": "Digital Wealth",
+        "status": "0"
+      },
+      {
+        "role_name": "DW Checker",
+        "product_line": "Digital Wealth",
+        "status": "0"
+      },
+      {
+        "role_name": "ASB maker",
+        "product_line": "ASB",
+        "status": "1"
+      },
+      {
+        "role_name": "ASB Checker",
+        "product_line": "ASB",
+        "status": "1"
+      },
+      {
+        "role_name": "Mortgage Maker",
+        "product_line": "Mortgage",
+        "status": "1"
+      },
+      {
+        "role_name": "Mortgage Checker",
+        "product_line": "Mortgage",
+        "status": "1"
+      },
+      {
+        "role_name": "DW Maker",
+        "product_line": "Digital Wealth",
+        "status": "1"
+      },
+      {
+        "role_name": "DW Checker",
+        "product_line": "Digital Wealth",
+        "status": "1"
+      },
+      {
+        "role_name": "ASB maker",
+        "product_line": "ASB",
+        "status": "0"
+      }
+    ]
+  }
+]
+
+const productline = [
+  [
+    {
+      "id": "1",
+      "name": "ASB"
+    },
+    {
+      "id": "2",
+      "name": "Mortgage"
+    },
+    {
+      "id": "3",
+      "name": "Digital Wealth"
+    }
+  ]
+]
+
 const sports = [
   { id: 1, title: "MORTGAGE" },
   { id: 2, title: "ASB" },
@@ -55,6 +178,14 @@ const sports = [
 
 app.get('/api/sports', (req, res) => {
   res.json(sports);
+});
+
+app.get('/api/rolelist', (req, res) => {
+  res.json(roleList);
+});
+
+app.get('/api/productline', (req, res) => {
+  res.json(productline);
 });
 
 app.post('/api/login', (req, res) => {
