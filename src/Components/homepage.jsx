@@ -6,6 +6,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import axios from "axios"; // Import axios for HTTP requests
 import '../styles/homepage.css';
 import Dots from  './images/dots.svg';
+import { Tags } from "./tags.tsx";
 
 const Homepage = () => {
   const location = useLocation();
@@ -187,7 +188,7 @@ const Homepage = () => {
               <tr key={index}>
                 <td>{role.role_name}</td>
                 <td>{role.product_line}</td>
-                <td>{role.status === "1" ? "Active" : "Inactive"}</td>
+                <td><Tags state={role.status === "1" ? "green" : "red"} textGreen="Active" textRed="Inactive" /></td>
                 <td style={{ cursor: "pointer"}}><img src={Dots} alt="SVG Image" /></td>
               </tr>
             ))}
