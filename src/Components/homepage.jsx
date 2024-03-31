@@ -1,11 +1,15 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable jsx-a11y/alt-text */
 // Update the Homepage component in homepage.jsx
 import React, { useState, useEffect } from "react";
 import { Segment, Dropdown, Checkbox } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
-import { Navigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import axios from "axios"; // Import axios for HTTP requests
 import '../styles/homepage.css';
-import Dots from  './images/dots.svg';
+import Dots from './images/dots.svg';
+import Arrow from './images/arrow_up.svg';
 import { Tags } from "./tags.tsx";
 
 const Homepage = () => {
@@ -22,10 +26,16 @@ const Homepage = () => {
   const [roleList, setRoleList] = useState([]);
   const [originalRoleList, setOriginalRoleList] = useState([]);
   const [productLines, setProductLines] = useState([]);
+  const [sortField, setSortField] = useState(null);
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+
 
   useEffect(() => {
     // Fetch sports data from the API
     const fetchSports = async () => {
+
       try {
         const response = await axios.get("http://localhost:5000/api/sports");
         setSports(response.data);
@@ -35,32 +45,50 @@ const Homepage = () => {
     };
 
     fetchSports();
+
   }, []); // Empty dependency array to run the effect only once
 
   useEffect(() => {
     // Fetch data from the API when the component mounts
-    fetch('http://localhost:5000/api/rolelist')
-      .then(response => response.json())
-      .then(data => {
-        setRoleList(data[0].data);
-        setOriginalRoleList(data[0].data);
-      })
-      .catch(error => console.error('Error fetching roleList:', error));
-
+    fetchRoleList(1);
     // Fetch product lines from the API
-    fetch('http://localhost:5000/api/productline')
-      .then(response => response.json())
-      .then(data => {
-        const initialSelectedOptions = {};
-        data[0].forEach(line => {
-          initialSelectedOptions[line.name.toLowerCase()] = false;
-        });
-
-        setProductLines(data[0]);
-        setSelectedOptions(initialSelectedOptions);
-      })
-      .catch(error => console.error('Error fetching productLines:', error));
+    fetchProductLines();
   }, []);
+  
+  
+  const fetchRoleList = async (page) => {
+    try {
+      const response = await axios.post("http://localhost:5000/api/rolelist", {
+        page,
+        sortField,
+        sortOrder,
+      });
+      setRoleList(response.data.data);
+      setOriginalRoleList(response.data.data);
+  
+      // Update totalPages based on the total number of records and page size
+      const pageSize = response.data.page_size;
+      const totalRecords = response.data.total_records;
+      const totalPages = Math.ceil(totalRecords / pageSize);
+      setTotalPages(totalPages);
+    } catch (error) {
+      console.error('Error fetching roleList:', error);
+    }
+  };
+
+  const fetchProductLines = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/api/productline");
+      const initialSelectedOptions = {};
+      response.data[0].forEach(line => {
+        initialSelectedOptions[line.name.toLowerCase()] = false;
+      });
+      setProductLines(response.data[0]);
+      setSelectedOptions(initialSelectedOptions);
+    } catch (error) {
+      console.error('Error fetching productLines:', error);
+    }
+  };
 
 
   const toggleSelection = (e, { label, checked }) => {
@@ -107,6 +135,40 @@ const Homepage = () => {
     setRoleList(filteredRoles);
     setModalVisible(false);
   };
+
+  const handleSort = (field) => {
+    if (sortField === field) {
+      // Toggle sort order if already sorting by this field
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    } else {
+      // Set sort field and default to ascending order
+      setSortField(field);
+      setSortOrder("asc");
+    }
+  
+    // Sort the roleList based on the selected field and order
+    const sortedRoles = [...roleList].sort((a, b) => {
+      if (sortOrder === "asc") {
+        return a[field].localeCompare(b[field]);
+      } else {
+        return b[field].localeCompare(a[field]);
+      }
+    });
+  
+    // Update roleList with the sorted data
+    setRoleList(sortedRoles);
+  };
+  
+
+  const handlePageChange = (page) => {
+    console.log("Changing page to:", page);
+    if (page >= 1 && page <= totalPages) {
+      fetchRoleList(page);
+      setCurrentPage(page);
+    }
+  };
+
+
 
 
   return (
@@ -177,10 +239,18 @@ const Homepage = () => {
         <table>
           <thead>
             <tr>
-              <th>Role Name</th>
-              <th>Product Line</th>
-              <th>Status</th>
-              <th>Action</th>
+              <th onClick={() => handleSort("role_name")}>
+                Role Name <img src={Arrow} className="arrow-up" />
+              </th>
+              <th onClick={() => handleSort("product_line")}>
+                Product Line <img src={Arrow} className="arrow-up" />
+              </th>
+              <th onClick={() => handleSort("status")}>
+                Status <img src={Arrow} className="arrow-up" />
+              </th>
+              <th>
+                Action
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -189,11 +259,16 @@ const Homepage = () => {
                 <td>{role.role_name}</td>
                 <td>{role.product_line}</td>
                 <td><Tags state={role.status === "1" ? "green" : "red"} textGreen="Active" textRed="Inactive" /></td>
-                <td style={{ cursor: "pointer"}}><img src={Dots} alt="SVG Image" /></td>
+                <td style={{ cursor: "pointer" }}><img src={Dots} alt="SVG Image" /></td>
               </tr>
             ))}
           </tbody>
         </table>
+      </div>
+      <div className="pagination">
+        <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)}>Previous</button>
+        <span>{currentPage} of {totalPages}</span>
+        <button disabled={currentPage === totalPages} onClick={() => handlePageChange(currentPage + 1)}>Next</button>
       </div>
     </div>
   );

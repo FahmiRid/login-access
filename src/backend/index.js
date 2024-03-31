@@ -53,6 +53,7 @@ const roleList = [
     "total_records": 18,
     "page": 1,
     "search_text": "ASB",
+    "sort": "asc",
     "data": [
       {
         "role_name": "ASB maker",
@@ -180,8 +181,31 @@ app.get('/api/sports', (req, res) => {
   res.json(sports);
 });
 
-app.get('/api/rolelist', (req, res) => {
-  res.json(roleList);
+// app.get('/api/rolelist', (req, res) => {
+//   res.json(roleList);
+// });
+
+app.post('/api/rolelist', (req, res) => {
+  // Assuming payload includes page number
+  const { page } = req.body;
+
+  // Assuming the API returns data for the requested page
+  const pageSize = 5;
+  const startIndex = (page - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const totalPages = Math.ceil(roleList[0].total_records / pageSize);
+
+  // Extract data for the requested page
+  const pageData = roleList[0].data.slice(startIndex, endIndex);
+
+  // Return the extracted page data along with total pages information
+  res.json({
+    page_size: pageSize,
+    total_records: roleList[0].total_records,
+    total_pages: totalPages,
+    page: page,
+    data: pageData
+  });
 });
 
 app.get('/api/productline', (req, res) => {
